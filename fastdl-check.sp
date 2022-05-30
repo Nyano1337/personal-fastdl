@@ -138,17 +138,9 @@ public void FastDLCheck_Callback(HTTPResponse response, any value, const char[] 
 		return;
 	}
 
-	if(FileExists("fastdlmaplist.json"))
-	{
-		DeleteFile("fastdlmaplist.json");
-	}
-
 	response.Data.ToFile("fastdlmaplist.json");
 
-	JSONObject maps_root = view_as<JSONObject>(JSONObject.FromFile("fastdlmaplist.json").Get("data"));
-
-	JSONArray maplist = view_as<JSONArray>(maps_root.Get("files"));
-	delete maps_root;
+	JSONArray maplist = view_as<JSONArray>(view_as<JSONObject>(JSONObject.FromFile("fastdlmaplist.json").Get("data")).Get("files"));
 
 	/* 遍历下载站地图的'files'键*/
 	for(int i = 0; i < maplist.Length; i++)
@@ -169,6 +161,11 @@ public void FastDLCheck_Callback(HTTPResponse response, any value, const char[] 
 	}
 
 	delete maplist;
+
+	if(FileExists("fastdlmaplist.json"))
+	{
+		DeleteFile("fastdlmaplist.json");
+	}
 
 	/* 遍历完了就开始下载啦(非异步) */
 	DownloadMapByStack();
