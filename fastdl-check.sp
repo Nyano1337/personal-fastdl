@@ -140,7 +140,10 @@ public void FastDLCheck_Callback(HTTPResponse response, any value, const char[] 
 
 	response.Data.ToFile("fastdlmaplist.json");
 
-	JSONArray maplist = view_as<JSONArray>(view_as<JSONObject>(JSONObject.FromFile("fastdlmaplist.json").Get("data")).Get("files"));
+	JSONObject maps_root = view_as<JSONObject>(JSONObject.FromFile("fastdlmaplist.json").Get("data"));
+
+	JSONArray maplist = view_as<JSONArray>(maps_root.Get("files"));
+	delete maps_root;
 
 	/* 遍历下载站地图的'files'键*/
 	for(int i = 0; i < maplist.Length; i++)
